@@ -29,7 +29,7 @@ There is already a [yank highlighter plugin](https://github.com/kometenstaub/obs
 
 ### Manual Installation
 
-1. Download the latest release from the [Releases](https://github.com/your-username/obsidian-vim-yank-highlight/releases) page.
+1. Download the latest release from the [Releases](https://github.com/aleksey-rowan/obsidian-vim-yank-highlight/releases) page.
 2. Extract the zip file into your Obsidian plugins folder.
 3. Reload Obsidian to activate the plugin.
 
