@@ -5,6 +5,8 @@ import { EditorView } from "@codemirror/view";
 import { MarkViewPlugin, markViewPlugin } from "./markViewPlugin";
 import { Vim, MarkdownViewExtended, vimEvents } from "./types";
 
+import { Settings, SettingsTab, DEFAULT_SETTINGS } from "./settings"
+
 // TODO: option to change highlight duration
 // TODO: option to change the colour of highlight
 // TODO: option to supress in visual mode
@@ -19,6 +21,8 @@ export default class VimYankHighlightPlugin extends Plugin {
 
     codeMirrorVimObject: Vim;
     timeoutHandle: number;
+
+    settings: Settings;
 
     private get activeView() {
         return this.app.workspace.getActiveViewOfType(
@@ -42,6 +46,9 @@ export default class VimYankHighlightPlugin extends Plugin {
     }
 
     async onload() {
+        await this.loadSettings()
+        this.addSettingTab(new SettingsTab(this.app, this))
+
         this.registerEditorExtension([markViewPlugin]);
 
         this.registerEvent(
@@ -116,7 +123,15 @@ export default class VimYankHighlightPlugin extends Plugin {
         clearTimeout(this.timeoutHandle);
         this.timeoutHandle = window.setTimeout(() => {
             plugin.cleanYankText(timeoutEditorView);
-        }, 500);
+        }, this.settings.highlightDuration);
+    }
+
+    async loadSettings() {
+        this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    }
+
+    async saveSettings() {
+        await this.saveData(this.settings);
     }
 
     onunload() {
